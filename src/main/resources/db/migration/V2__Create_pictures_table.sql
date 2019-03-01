@@ -1,4 +1,4 @@
 create table PICTURES (
-    ID int not null,
-    PATH varchar(100) not null
+    id int not null,
+    path varchar(100) not null
 );
