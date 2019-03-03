@@ -1,12 +1,18 @@
 package memy.memy.picture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,16 +28,18 @@ public class PicturesController {
 
     @GetMapping(value = "/pictures")
     public @ResponseBody
-    List<PictureData> getPictures() { //mocked already
-        PictureData pictureData = new PictureData();
-        pictureData.setPath("1.jpg");
+    List<PictureData> getPictures(Pageable pageable) { //mocked already
 
-        return Collections.singletonList(pictureData);
+        return pictureDownloader.getAllPicturesData();
     }
 
-    @GetMapping(value = "/picture")
-    public @ResponseBody
-    byte[] getImageAsByteArray(@RequestParam("fileTag") String fileTag) throws IOException {
-        return pictureDownloader.getImageAsByteArray(fileTag);
+
+    @GetMapping("/picture")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@RequestParam("fileTag") String fileTag) {
+        Resource file = pictureDownloader.loadFile(fileTag);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 }
