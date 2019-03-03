@@ -1,7 +1,10 @@
-package memy.memy.picture;
+package memy.memy.picture.entity;
+
+import lombok.Data;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "pictures")
 public class Picture {
