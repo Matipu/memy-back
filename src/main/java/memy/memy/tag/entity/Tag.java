@@ -1,9 +1,12 @@
 package memy.memy.tag.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
-@Table(name = "pictures")
+@Table(name = "tags")
 public class Tag {
 
     @Id
