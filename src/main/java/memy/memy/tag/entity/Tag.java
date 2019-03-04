@@ -1,4 +1,4 @@
-package memy.memy.tag;
+package memy.memy.tag.entity;
 
 import javax.persistence.*;
 
