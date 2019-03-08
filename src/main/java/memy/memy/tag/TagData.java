@@ -3,6 +3,6 @@ package memy.memy.tag;
 import lombok.Data;
 
 @Data
-public class TagData {
+class TagData {
     private String name;
 }

@@ -3,7 +3,8 @@ package memy.memy.picture;
 import lombok.Data;
 
 @Data
-public class PictureData {
+class PictureData {
 
+    private Long id;
     private String path;
 }

@@ -1,5 +1,6 @@
 package memy.memy.picture;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -14,40 +15,34 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-public class PictureDownloader {
+class PictureDownloader {
 
-    private String folderPath;
     private final Path rootLocation;
+
+    @Autowired
+    private PicturesRepository picturesRepository;
+
+    @Autowired
+    private PictureConventer pictureConventer;
 
     PictureDownloader() throws IOException {
         Properties prop = new Properties();
         String propFileName = "application.properties";
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
         prop.load(inputStream);
-        this.folderPath = prop.getProperty("memy.pictures.path");
-        this.rootLocation = Paths.get(folderPath);
+        this.rootLocation = Paths.get(prop.getProperty("memy.pictures.path"));
     }
 
     public List<PictureData> getAllPicturesData() {
         List<PictureData> pictures = new ArrayList<>();
-        addToTist(pictures, "1.jpg");
-        addToTist(pictures, "pach.png");
-        addToTist(pictures, "hejters.gif");
-        addToTist(pictures, "tabletki.jpg");
-        addToTist(pictures, "partner.jpg");
-        addToTist(pictures, "hmmm.jpg");
-        addToTist(pictures, "hmm.png");
+        picturesRepository.findAll().forEach(
+                picture -> pictures.add(pictureConventer.convert(picture))
+        );
 
         return pictures;
     }
 
-    void addToTist(List<PictureData> pictures, String tag) {
-        PictureData pictureData2 = new PictureData();
-        pictureData2.setPath(tag);
-        pictures.add(pictureData2);
-    }
-
-    public Resource loadFile(String filename) {
+    Resource loadFile(String filename) {
         try {
             Path file = rootLocation.resolve(filename);
             Resource resource = new UrlResource(file.toUri());

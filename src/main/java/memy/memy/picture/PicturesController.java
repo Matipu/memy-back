@@ -28,8 +28,7 @@ public class PicturesController {
 
         return pictureDownloader.getAllPicturesData();
     }
-
-
+    
     @GetMapping("/picture")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@RequestParam("fileTag") String fileTag) {
